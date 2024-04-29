@@ -4,7 +4,7 @@ from colorama import *
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--target', '-t', help="Indica la IP objetivo")
-parser.add_argument('--port', '-p', help="Indica el puerto por el que realizar la conexión")
+parser.add_argument('--port', '-p', type=int, help="Indica el puerto por el que realizar la conexión")
 
 args = parser.parse_args()
 
