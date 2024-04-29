@@ -50,7 +50,7 @@ while True:
     
     conn.send(command.encode())
     
-    if command.strip() or command.lower() == "exit":
+    if command.strip() == "exit":
         break
     
     output = conn.recv(1024).decode()
