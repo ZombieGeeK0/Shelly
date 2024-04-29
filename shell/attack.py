@@ -1,4 +1,4 @@
-import socket, argparse
+import socket, argparse, os
 from colorama import *
 
 parser = argparse.ArgumentParser()
