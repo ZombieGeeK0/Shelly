@@ -39,6 +39,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
 s.listen(1)
 
+print_title()
 print(color.WHITE + f'[*] Escuchando conexiones en {HOST}:{PORT}')
 
 conn, addr = s.accept()
