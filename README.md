@@ -1,3 +1,1 @@
 # Shelly
-
-ofuscar el codigo
