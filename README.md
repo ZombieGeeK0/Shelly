@@ -16,7 +16,7 @@
 
 `To contact me, you can send an invitation to qwfkr through Discord or send an email to 3xpl107.contact@proton.me.`
 
-#### 🇫🇷 FRANCAIS 🇫🇷
+#### 🇫🇷 FRANÇAIS 🇫🇷
 
 `Shelly est un Reverse Shell pour l'exécution de commandes à distance réalisé avec Python, et son code a été obscurci (en particulier le fichier victim.py), de sorte qu'il est difficile à détecter par les antivirus conventionnels. Il permet l'exécution de commandes à distance sur n'importe quel système d'exploitation. Il est très intuitif et gérable, ainsi que léger et indétectable. Il crée une connexion par défaut sur le port 80 (HTTP), mais vous pouvez modifier le port dans le code. Pour le faire fonctionner, changez l'IP de victim.py par l'IP qui doit recevoir la connexion (l'IP de la machine attaquante), et dans le fichier shelly.py indiquez l'IP à laquelle se connecter à l'aide de l'argument -t. Exemple : python3 shelly.py -t 127.0.1.1.`
 
