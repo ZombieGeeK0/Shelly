@@ -39,7 +39,7 @@ if args.ping:
 
 elif args.target:
     H=args.target
-    P=80
+    P=8080
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.bind((H,P))
     s.listen(1)
