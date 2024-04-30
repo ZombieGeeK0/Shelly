@@ -3,7 +3,7 @@ import subprocess as _
 import socket as __
 
 H = '127.0.1.1'
-P = 80
+P = 8080
 s = __.socket(__.AF_INET, __.SOCK_STREAM)
 s.connect((H, P))
 
