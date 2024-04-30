@@ -1,5 +1,5 @@
 import socket, argparse, os
-from colorama import *
+from colorama import Fore, Style
 parser = argparse.ArgumentParser()
 parser.add_argument('--target', '-t', help="Indica la IP objetivo")
 parser.add_argument('--ping', '-p', help="Indica la IP a la que relizar el ping de verificación")
