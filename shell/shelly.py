@@ -4,7 +4,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--target', '-t', help="Indica la IP objetivo")
 parser.add_argument('--ping', '-p', help="Indica la IP a la que relizar el ping de verificación")
 args = parser.parse_args()
-def c():
+def cl():
     if os.name=="nt":os.system("cls")
     else:os.system("clear")
 class c:
@@ -24,18 +24,18 @@ def p():
     print(c.R+t)
 
 if args.ping:
-    c()
+    cl()
     try:
         if os.name=="nt":os.system(c.R + f'ping -n 1 {args.ping}')
         else:os.system(c.R + f'ping -c 1 {args.ping}')
-        c()
+        cl()
         p()
-        print(c.R + '[*] Ping relizado con éxito, hay conectividad con la máquina víctima')
+        print(c.R + '[*] Ping relizado con éxito, hay conectividad con la máquina víctima\n')
     
     except Exception as ex:
-        c()
+        cl()
         p()
-        print(c.R + '[*] No hay conectividad con la víctima. Error: ' + ex)
+        print(c.R + '[*] No hay conectividad con la víctima. Error: ' + ex + '\n')
 
 elif args.target:
     H=args.target
@@ -56,6 +56,6 @@ elif args.target:
     n.close()
 
 else:
-    c()
+    cl()
     p()
     print('[*] Error: No argument found')
