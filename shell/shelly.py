@@ -41,9 +41,9 @@ def check_internet_connection():
         g = requests.get('https://www.google.com/')
         status_code = g.status_code
         if status_code == 200:
-            response_text.insert(tk.END, '[*] Hay conexión a internet\n', 'blue') 
+            response_text.insert(tk.END, '[*] Hay conexión a internet en tu máquina\n', 'blue') 
         else:
-            response_text.insert(tk.END, '[*] No hay conexión a internet\n', 'blue') 
+            response_text.insert(tk.END, '[*] No hay conexión a internet en tu máquina\n', 'blue') 
     except Exception as e:
         response_text.insert(tk.END, f'[*] Error al verificar la conexión a internet: {str(e)}\n', 'red') 
 
