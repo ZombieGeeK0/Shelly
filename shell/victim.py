@@ -1,5 +1,5 @@
 import subprocess, socket, os
-H = '192.168.1.132'
+H = '127.0.1.1'
 P = 8080
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((H, P))
