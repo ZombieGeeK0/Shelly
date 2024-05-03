@@ -1,12 +1,9 @@
-import socket, os, requests, threading
+import socket, os, requests, threading, socket
 import tkinter as tk
 from PIL import Image, ImageTk
 
-def clear_screen():
-    if os.name == "nt":
-        os.system("cls")
-    else:
-        os.system("clear")
+hostname = socket.gethostname()
+ip = socket.gethostbyname(hostname)
 
 def send_command(command):
     try:
@@ -43,12 +40,12 @@ def check_internet_connection():
         if status_code == 200:
             response_text.insert(tk.END, '[*] Hay conexión a internet en tu máquina\n', 'blue') 
         else:
-            response_text.insert(tk.END, '[*] No hay conexión a internet en tu máquina\n', 'blue') 
+            response_text.insert(tk.END, '[*] No hay conexión a internet en tu máquina\n', 'red') 
     except Exception as e:
-        response_text.insert(tk.END, f'[*] Error al verificar la conexión a internet: {str(e)}\n', 'red') 
+        response_text.insert(tk.END, f'[*] No hay conexión a internet en tu máquina\n', 'red') 
 
 def accept_connections():
-    H = '0.0.0.0'
+    H = ip
     P = 8080
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((H, P))
@@ -71,7 +68,7 @@ def save_target_ip():
 
 root = tk.Tk()
 root.title("Reverse Shell GUI")
-root.geometry("700x400")
+root.geometry("700x500")
 
 icon_image = Image.open("shell.png")
 icon_photo = ImageTk.PhotoImage(icon_image)
@@ -107,8 +104,9 @@ internet_button.pack(side=tk.LEFT, padx=5)
 response_text = tk.Text(root, font=("Consolas", 12))
 response_text.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
 
-threading.Thread(target=accept_connections, daemon=True).start()
+threading.Thread(target=accept_connections, daemon=True).start()  
 
 response_text.tag_configure('blue', foreground='blue')
+response_text.tag_configure('red', foreground='red')
 
 root.mainloop()
